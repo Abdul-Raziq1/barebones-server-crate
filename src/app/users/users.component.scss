@@ -1,0 +1,22 @@
+nav {
+    padding-block: 24px;
+}
+
+ul {
+    display: flex;
+    list-style-type: none;
+    column-gap: 8px;
+}
+
+ul > li:last-child {
+    margin-left: auto;
+}
+
+li {
+    cursor: pointer;
+}
+
+.active {
+    color: blue;
+    text-decoration: underline;
+}

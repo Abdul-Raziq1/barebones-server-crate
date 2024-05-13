@@ -1,0 +1,10 @@
+<main class="max-cap">
+    <a class="back-home" routerLink="/">Home</a>
+    <form class="globalAuthForm" [formGroup]="loginForm">
+        <h1 class="globalAuthHeader">Login</h1>
+        <app-input placeholder="Enter your email" [control]="email" inputName="Email"/>
+        <app-input inputType="password" placeholder="Enter your password" [control]="password" inputName="Password"/>
+        <button class="globalAuthButton">Login</button>
+        <p>Don&apos;t have an account ? <a routerLink="/signup">Sign Up</a></p>
+    </form>
+</main>

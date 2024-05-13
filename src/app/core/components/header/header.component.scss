@@ -1,0 +1,24 @@
+nav {
+    padding-block: 24px;
+    border-bottom-width: 1px;
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+ul {
+    display: flex;
+    list-style-type: none;
+    column-gap: 8px;
+}
+
+ul > li:nth-child(3) {
+    margin-left: auto;
+}
+
+li {
+    cursor: pointer;
+}
+
+.active {
+    color: blue;
+    text-decoration: underline;
+}

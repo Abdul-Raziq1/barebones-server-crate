@@ -1,16 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 main {
-    max-width: 1239px;
-    margin: 0 auto;
+  position: relative;
+  min-height: 100%;
+}
+
+.max-cap {
+  max-width: 1239px;
+  margin: 0 auto;
+}
+
+.back-home {
+  display: inline-block;
+  margin-block: 24px;
+}
+
+.globalAuthForm {
+  display: grid;
+  row-gap: 8px;
+  min-width: 350px;
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  inset: 0;
+}
+
+.globalAuthForm > p {
+  text-align: center;
+}
+
+.globalAuthButton {
+  padding-block: 6px;
+}
+
+@media (min-width: 600px) {
+  .globalAuthForm {
+    min-width: 500px;
+  }
 }

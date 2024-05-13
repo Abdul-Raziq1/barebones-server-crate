@@ -1,10 +1,4 @@
-<main>
-  <nav>
-    <ul>
-      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</li>
-      <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/products">Products</li>
-      <li routerLink="/admin">Admin</li>
-    </ul>
-  </nav>
+<app-header />
+<main class="max-cap">
   <router-outlet />
 </main>

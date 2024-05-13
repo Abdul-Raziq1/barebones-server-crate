@@ -9,5 +9,13 @@ export const routes: Routes = [
     {
         path: 'admin',
         loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
-    }
+    },
+    {
+        path: 'login',
+        loadComponent: () => import('./auth/login/login.component').then(c => c.LoginComponent)
+      },
+      {
+        path: 'signup',
+        loadComponent: () => import('./auth/signup/signup.component').then(c => c.SignupComponent)
+      }
 ];

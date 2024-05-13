@@ -1,4 +1,4 @@
 <label [for]="inputName">
     <span>{{ inputName }}</span>
-    <input [id]="inputName" [type]="inputType" [placeholder]="placeholder" [formControl]="control">
+    <input [class]="isInvalid() ? 'invalid' : ''" [id]="inputName" [type]="inputType" [placeholder]="placeholder" [formControl]="control">
 </label>

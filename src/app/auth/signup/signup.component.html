@@ -1,14 +1,102 @@
 <main class="max-cap">
-    <a class="back-home" routerLink="/">Home</a>
-    <form class="globalAuthForm" [formGroup]="signUpForm" (ngSubmit)="registerUser()">
-        <h1 class="globalAuthHeader">Register</h1>
-        <app-loader [loadingState]="loadingState()" loaderSizeClass="loader loader-sm"/>
-        <app-input placeholder="Enter your first name" [control]="firstName" inputName="First Name"/>
-        <app-input placeholder="Enter your last name" [control]="lastName" inputName="Last Name"/>
-        <app-input placeholder="Enter your email" [control]="email" inputName="Email"/>
-        <app-input inputType="password" placeholder="Enter your password" [control]="password" inputName="Password"/>
-        <app-input inputType="password" placeholder="Confirm your new password" [control]="confirmPassword" inputName="Confirm password"/>
-        <button class="globalAuthButton">Sign up</button>
-        <p>Already have an account ? <a routerLink="/login">Login</a></p>
-    </form>
+  <a class="back-home" routerLink="/">Home</a>
+  <form
+    class="globalAuthForm"
+    [formGroup]="signUpForm"
+    #form="ngForm"
+    (ngSubmit)="registerUser()"
+  >
+    <h1 class="globalAuthHeader">Register</h1>
+    <app-loader
+      [loadingState]="loadingState()"
+      loaderSizeClass="loader loader-sm"
+    />
+    <div>
+      <app-input
+        [class]=""
+        placeholder="Enter your first name"
+        [control]="firstName"
+        [isInvalid]="(signUpForm.controls.firstName.dirty || form.submitted) &&
+        !signUpForm.controls.firstName.valid"
+        inputName="First Name"
+      />
+      <span
+        *ngIf="
+          (signUpForm.controls.firstName.dirty || form.submitted) &&
+          !signUpForm.controls.firstName.valid
+        "
+      >Required</span>
+    </div>
+    <div>
+      <app-input
+        placeholder="Enter your last name"
+        [control]="lastName"
+        [isInvalid]="(signUpForm.controls.lastName.dirty || form.submitted) &&
+        !signUpForm.controls.lastName.valid"
+        inputName="Last Name"
+      />
+      <span
+        *ngIf="
+          (signUpForm.controls.lastName.dirty || form.submitted) &&
+          !signUpForm.controls.lastName.valid
+        "
+      >Required</span>
+    </div>
+    <div>
+      <app-input
+        placeholder="Enter your email"
+        [control]="email"
+        [isInvalid]="(signUpForm.controls.email.dirty || form.submitted) &&
+        !signUpForm.controls.email.valid"
+        inputName="Email"
+      />
+      <span
+        *ngIf="
+          (signUpForm.controls.email.dirty || form.submitted) &&
+          !signUpForm.controls.email.valid
+        "
+      >Must be a valid email</span>
+    </div>
+    <div>
+      <app-input
+        inputType="password"
+        placeholder="Enter your password"
+        [control]="password"
+        [isInvalid]="(signUpForm.controls.password.dirty || form.submitted) &&
+        !signUpForm.controls.password.valid"
+        inputName="Password"
+      />
+      <span
+        *ngIf="
+          (signUpForm.controls.password.dirty || form.submitted) &&
+          !signUpForm.controls.password.valid
+        "
+      >Required</span>
+    </div>
+    <div>
+      <app-input
+        inputType="password"
+        placeholder="Confirm your new password"
+        [control]="confirmPassword"
+        [isInvalid]="(signUpForm.controls.confirmPassword.dirty || form.submitted) &&
+        !signUpForm.controls.confirmPassword.valid"
+        inputName="Confirm password"
+      />
+      <span
+        *ngIf="
+          ((signUpForm.controls.confirmPassword.dirty || form.submitted) &&
+          signUpForm.hasError('passwordMatch')) 
+        "
+      >Must match password</span>
+    </div>
+
+    <button
+      [disabled]="loadingState().isLoading"
+      type="submit"
+      class="globalAuthButton"
+    >
+      Sign up
+    </button>
+    <p>Already have an account ? <a routerLink="/login">Login</a></p>
+  </form>
 </main>

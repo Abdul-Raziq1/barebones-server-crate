@@ -5,5 +5,15 @@ label {
 
 input {
     padding: 8px;
-    border-width: 1.5px;
+    border: 1.5px solid black;
+}
+
+input:focus {
+    outline: 2px solid #ff3d00;
+    outline-offset: 1px;
+}
+
+.invalid {
+    border-color: red;
+    outline-color: red;
 }

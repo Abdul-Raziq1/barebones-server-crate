@@ -1,7 +1,9 @@
-@if (loadingState().isLoading) {
-<span [class]="loaderSizeClass"></span>
-} @else if (loadingState().error) {
-<div class="alert error">{{ loadingState().error }}</div>
-} @else if (loadingState().message) {
-<div class="alert success">{{ loadingState().message }}</div>
-}
+<div class="loader-container">
+    @if (loadingState().isLoading) {
+    <span [class]="loaderSizeClass"></span>
+    } @else if (loadingState().error) {
+    <div class="alert error">{{ loadingState().error }}</div>
+    } @else if (loadingState().message) {
+    <div class="alert success">{{ loadingState().message }}</div>
+    }
+</div>

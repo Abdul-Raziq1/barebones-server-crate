@@ -1,4 +1,5 @@
 .loader {
+    margin: 0 auto;
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
@@ -23,13 +24,18 @@
   .alert {
     color: white;
     padding: 4px 8px;
-
+    width: 100%;
+    text-align: center;
   }
   .success {
     background-color: green;
   }
   .error {
     background-color: red;
+  }
+
+  .loader-container {
+    display: flex;
   }
 
   @keyframes rotation {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -14,5 +14,6 @@ export class InputComponent {
   @Input({ required: true }) inputName!: string
   @Input({ required: true }) placeholder!: string
   @Input() inputType: string = 'text'
+  isInvalid = input<boolean | undefined>(undefined)
 
 }

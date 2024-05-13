@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { LoadingState } from '../../shared/shared.types';
 import { getErrorMessage } from '../../core/util/util';
+import { passwordMatchesValidator } from '../../core/util/validators';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -33,15 +34,20 @@ export class SignupComponent implements OnInit {
     this.signUpForm = new FormGroup<SignUpFormData>({
       firstName: new FormControl('', { nonNullable: true, validators: Validators.required }),
       lastName: new FormControl('', { nonNullable: true, validators: Validators.required }),
-      email: new FormControl('', { nonNullable: true, validators: Validators.required }),
+      email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
       password: new FormControl('', { nonNullable: true, validators: Validators.required }),
       confirmPassword: new FormControl('', { nonNullable: true, validators: Validators.required }),
-    })
+    }, { updateOn: 'blur', validators: [passwordMatchesValidator] })
   }
 
 
   registerUser() {
-    if (this.signUpForm.invalid) return;
+    if (this.signUpForm.invalid) {
+      this.signUpForm.markAllAsTouched();
+      console.log('Errors', this.signUpForm.errors);
+      
+      return;
+    }
     this.loadingState.update(state => ({...state, isLoading: true }));
     const user: UserSignup = this.signUpForm.value as UserSignup
     

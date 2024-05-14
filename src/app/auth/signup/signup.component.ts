@@ -20,8 +20,8 @@ import { passwordMatchesValidator } from '../../core/util/validators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupComponent implements OnInit {
-  private authService = inject(AuthService)
-  private destroyRef = inject(DestroyRef)
+  #authService = inject(AuthService)
+  #destroyRef = inject(DestroyRef)
 
   protected signUpForm!: FormGroup<SignUpFormData>
   protected loadingState = signal<LoadingState>({
@@ -51,7 +51,7 @@ export class SignupComponent implements OnInit {
     this.loadingState.update(state => ({...state, isLoading: true }));
     const user: UserSignup = this.signUpForm.value as UserSignup
     
-    this.authService.signup(user).pipe(
+    this.#authService.signup(user).pipe(
       tap((response) => {
         this.loadingState.update(state => ({...state, isLoading: false, message: response.message, error: undefined}))
       }),
@@ -59,7 +59,7 @@ export class SignupComponent implements OnInit {
         this.loadingState.update(state => ({ ...state, isLoading: false, error: getErrorMessage(err), message: ''}))
         return EMPTY
       }),
-      takeUntilDestroyed(this.destroyRef)
+      takeUntilDestroyed(this.#destroyRef)
     ).subscribe()
   }
 

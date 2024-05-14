@@ -7,11 +7,10 @@ import { UserSignup } from '../../../auth/signup/signup.types';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = environment.baseUrl
-
-  constructor(private http: HttpClient) {}
+  #baseUrl = environment.baseUrl
+  #http = inject(HttpClient)
 
   signup(user: UserSignup) {
-    return this.http.post<{message: string}>(`${this.baseUrl}/auth/signup`, user)
+    return this.#http.post<{message: string}>(`${this.#baseUrl}/auth/signup`, user)
   }
 }

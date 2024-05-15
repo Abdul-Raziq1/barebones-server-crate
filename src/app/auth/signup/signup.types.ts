@@ -14,3 +14,8 @@ export interface UserSignup {
     email: string;
     password: string
 }
+
+export interface VerifyEmail {
+    email: string;
+    code: string
+}

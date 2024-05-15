@@ -1,0 +1,10 @@
+<main class="max-cap">
+    <section class="globalAuthForm">
+        <h1>Verify Email</h1>
+        <p>Check your email for an OTP</p>
+        <app-countdown [(countDownTimer)]="countDownTimer"/>
+        <ng-otp-input [formCtrl]="otp" [config]="{ length: 6 }"/>
+        <p>Didn&apos;t receive OTP? <button class="resend-btn">Resend</button></p>
+        <button (click)="verifyEmail()" [disabled]="countDownTimer === '00:00'" class="globalAuthButton">Verify Email</button>
+    </section>
+</main>

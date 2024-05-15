@@ -1,11 +1,11 @@
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { InputComponent } from '../../shared/components/input/input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignUpFormData, UserSignup } from './signup.types';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth/auth.service';
-import { EMPTY, catchError, tap } from 'rxjs';
+import { EMPTY, catchError, delay, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { LoadingState } from '../../shared/shared.types';
@@ -22,6 +22,7 @@ import { passwordMatchesValidator } from '../../core/util/validators';
 export class SignupComponent implements OnInit {
   #authService = inject(AuthService)
   #destroyRef = inject(DestroyRef)
+  #router = inject(Router)
 
   protected signUpForm!: FormGroup<SignUpFormData>
   protected loadingState = signal<LoadingState>({
@@ -43,18 +44,18 @@ export class SignupComponent implements OnInit {
 
   registerUser() {
     if (this.signUpForm.invalid) {
-      this.signUpForm.markAllAsTouched();
-      console.log('Errors', this.signUpForm.errors);
-      
+      this.signUpForm.markAllAsTouched();      
       return;
     }
     this.loadingState.update(state => ({...state, isLoading: true }));
     const user: UserSignup = this.signUpForm.value as UserSignup
     
     this.#authService.signup(user).pipe(
-      tap((response) => {
-        this.loadingState.update(state => ({...state, isLoading: false, message: response.message, error: undefined}))
+      tap(() => {
+        this.loadingState.update(state => ({...state, isLoading: false, message: 'OTP has been sent to your email', error: undefined}))
       }),
+      delay(2000),
+      tap(() => this.#router.navigate(['/signup/otp'])),
       catchError((err) => {        
         this.loadingState.update(state => ({ ...state, isLoading: false, error: getErrorMessage(err), message: ''}))
         return EMPTY

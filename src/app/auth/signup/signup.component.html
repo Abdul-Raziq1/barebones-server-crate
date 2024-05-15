@@ -7,10 +7,12 @@
     (ngSubmit)="registerUser()"
   >
     <h1 class="globalAuthHeader">Register</h1>
-    <app-loader
-      [loadingState]="loadingState()"
-      loaderSizeClass="loader loader-sm"
-    />
+    @defer (on interaction(signup)) {
+      <app-loader
+        [loadingState]="loadingState()"
+        loaderSizeClass="loader loader-sm"
+      />
+    }
     <div>
       <app-input
         [class]=""
@@ -91,6 +93,7 @@
     </div>
 
     <button
+      #signup
       [disabled]="loadingState().isLoading"
       type="submit"
       class="globalAuthButton"

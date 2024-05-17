@@ -1,1 +1,1 @@
-<span>{{time()}}</span>
+<ng-container *ngIf="countdownTimer$ | async as countDownTimer"><span>{{countDownTimer}}</span></ng-container>

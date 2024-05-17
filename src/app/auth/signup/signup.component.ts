@@ -11,6 +11,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 import { LoadingState } from '../../shared/shared.types';
 import { getErrorMessage } from '../../core/util/util';
 import { passwordMatchesValidator } from '../../core/util/validators';
+import { UserService } from '../../core/services/user/user.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -23,12 +24,13 @@ export class SignupComponent implements OnInit {
   #authService = inject(AuthService)
   #destroyRef = inject(DestroyRef)
   #router = inject(Router)
+  #userService = inject(UserService)
 
   protected signUpForm!: FormGroup<SignUpFormData>
   protected loadingState = signal<LoadingState>({
     isLoading: false,
     error: undefined,
-    message: ''
+    successMessage: ''
   })
 
   ngOnInit(): void {
@@ -52,12 +54,14 @@ export class SignupComponent implements OnInit {
     
     this.#authService.signup(user).pipe(
       tap(() => {
-        this.loadingState.update(state => ({...state, isLoading: false, message: 'OTP has been sent to your email', error: undefined}))
+        this.loadingState.update(state => ({...state, isLoading: false, successMessage: 'OTP has been sent to your email', error: undefined}))
+        this.#userService.updateUser({email: user.email, firstName: user.firstName, lastName: user.lastName, token: '' })
+        this.#authService.isAuthenticated()
       }),
-      delay(2000),
+      delay(1000),
       tap(() => this.#router.navigate(['/signup/otp'])),
       catchError((err) => {        
-        this.loadingState.update(state => ({ ...state, isLoading: false, error: getErrorMessage(err), message: ''}))
+        this.loadingState.update(state => ({ ...state, isLoading: false, error: getErrorMessage(err), successMessage: '',}))
         return EMPTY
       }),
       takeUntilDestroyed(this.#destroyRef)

@@ -13,6 +13,6 @@ export class AppComponent {
   title = 'barebones-server-crate';
 
   constructor(private authService: AuthService) {
-    this.authService.isAuthenticated()
+    this.authService.updateAuthStatus()
   }
 }

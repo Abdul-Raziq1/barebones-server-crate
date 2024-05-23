@@ -9,7 +9,7 @@
     <h1 class="globalAuthHeader">Register</h1>
     @defer (on interaction(signup)) {
       <app-loader
-        [loadingState]="loadingState()"
+        [loadingState]="loadingService.loadingState()"
         loaderSizeClass="loader loader-sm"
       />
     }
@@ -94,7 +94,7 @@
 
     <button
       #signup
-      [disabled]="loadingState().isLoading"
+      [disabled]="loadingService.loadingState().isLoading"
       type="submit"
       class="globalAuthButton"
     >

@@ -11,11 +11,18 @@ import { LoadingState } from '../../../../shared/shared.types';
 import { getErrorMessage } from '../../../../core/util/util';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { Router } from '@angular/router';
+import { LoadingService } from '../../../../core/services/loading/loading.service';
 
 @Component({
   selector: 'app-otp',
   standalone: true,
-  imports: [NgOtpInputModule, CountdownComponent, CommonModule, LoaderComponent],
+  imports: [
+    NgOtpInputModule,
+    CountdownComponent,
+    CommonModule,
+    LoaderComponent,
+  ],
+  providers: [LoadingService],
   templateUrl: './otp.component.html',
   styleUrl: './otp.component.scss',
 })
@@ -23,49 +30,37 @@ export class OtpComponent {
   #authService = inject(AuthService);
   #userService = inject(UserService);
   #destroyRef = inject(DestroyRef);
-  #router = inject(Router)
+  #router = inject(Router);
 
   countDownTimer!: string | undefined;
   otp = new FormControl('', { nonNullable: true });
-  protected loadingState = signal<LoadingState>({
-    isLoading: false,
-    error: undefined,
-    successMessage: '',
-  });
-  resendOtp() {}
-
-  resetTimer() {}
+  // protected loadingState = signal<LoadingState>({
+  //   isLoading: false,
+  //   error: undefined,
+  //   successMessage: '',
+  // });
+  loadingService: LoadingService = inject(LoadingService);
 
   verifyEmail() {
     console.log('Verifying email', this.otp.value);
-    this.loadingState.update((state) => ({ ...state, isLoading: true }));
+    this.loadingService.setLoadingToTrue();
     const user = this.#userService.getUserInfo();
-
-    if (this.otp.value.length === 6) {
+    const otp = this.otp.value;
+    if (otp.length === 6) {
       console.log('User', user);
       this.#authService
-        .verifyEmail({ code: this.otp.value, email: user.email })
+        .verifyEmail({ code: otp, email: user.email })
         .pipe(
+          tap(() => this.loadingService.setLoadingToFalse()),
           tap((loggedInUser) => {
             this.#userService.updateUser(loggedInUser);
-            this.loadingState.update((state) => ({
-              ...state,
-              isLoading: false,
-              successMessage: 'Verification successful',
-              error: undefined,
-            }));
-            this.#authService.isAuthenticated()
-            this.#router.navigate(['/settings'], { replaceUrl: true })
-            this.countDownTimer = '00:00'
-
+            this.loadingService.updateSuccessMessage('Verification successful');
+            this.#authService.updateAuthStatus();
+            this.countDownTimer = '00:00';
+            this.#router.navigate(['/settings'], { replaceUrl: true });
           }),
           catchError((err) => {
-            this.loadingState.update((state) => ({
-              ...state,
-              isLoading: false,
-              successMessage: '',
-              error: getErrorMessage(err),
-            }));
+            this.loadingService.updateErrorMessageByError(err)
             return EMPTY;
           }),
           takeUntilDestroyed(this.#destroyRef)

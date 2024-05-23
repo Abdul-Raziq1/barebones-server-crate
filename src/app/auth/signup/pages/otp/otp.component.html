@@ -1,7 +1,7 @@
 <section class="globalAuthForm">
   <h1>Verify Email</h1>
   <app-loader
-    [loadingState]="loadingState()"
+    [loadingState]="loadingService.loadingState()"
     [loaderSizeClass]="'loader loader-sm'"
   />
   <p>Check your email for an OTP</p>

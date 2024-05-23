@@ -12,6 +12,7 @@ import { LoadingState } from '../../shared/shared.types';
 import { getErrorMessage } from '../../core/util/util';
 import { passwordMatchesValidator } from '../../core/util/validators';
 import { UserService } from '../../core/services/user/user.service';
+import { LoadingService } from '../../core/services/loading/loading.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -25,13 +26,9 @@ export class SignupComponent implements OnInit {
   #destroyRef = inject(DestroyRef)
   #router = inject(Router)
   #userService = inject(UserService)
+  loadingService = inject(LoadingService)
 
   protected signUpForm!: FormGroup<SignUpFormData>
-  protected loadingState = signal<LoadingState>({
-    isLoading: false,
-    error: undefined,
-    successMessage: ''
-  })
 
   ngOnInit(): void {
     this.signUpForm = new FormGroup<SignUpFormData>({
@@ -49,19 +46,20 @@ export class SignupComponent implements OnInit {
       this.signUpForm.markAllAsTouched();      
       return;
     }
-    this.loadingState.update(state => ({...state, isLoading: true }));
+    this.loadingService.setLoadingToTrue()
     const user: UserSignup = this.signUpForm.value as UserSignup
     
     this.#authService.signup(user).pipe(
+      tap(() => this.loadingService.setLoadingToFalse()),
+      tap(() => this.loadingService.updateSuccessMessage('OTP has been sent to your email')),
       tap(() => {
-        this.loadingState.update(state => ({...state, isLoading: false, successMessage: 'OTP has been sent to your email', error: undefined}))
         this.#userService.updateUser({email: user.email, firstName: user.firstName, lastName: user.lastName, token: '' })
-        this.#authService.isAuthenticated()
+        this.#authService.updateAuthStatus()
       }),
       delay(1000),
       tap(() => this.#router.navigate(['/signup/otp'])),
       catchError((err) => {        
-        this.loadingState.update(state => ({ ...state, isLoading: false, error: getErrorMessage(err), successMessage: '',}))
+        this.loadingService.updateErrorMessageByError(err)
         return EMPTY
       }),
       takeUntilDestroyed(this.#destroyRef)

@@ -52,7 +52,7 @@ export class AuthService {
     return null;
   }
 
-  isAuthenticated() {
+  updateAuthStatus() {
     const token = this.getUserToken();
     if (token) {
       const tokenPayload: TokenPayload = jwtDecode(token);

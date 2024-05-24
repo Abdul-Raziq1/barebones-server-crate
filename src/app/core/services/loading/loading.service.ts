@@ -40,7 +40,9 @@ export class LoadingService {
   }
 
   updateErrorMessageByError(error: any) {
-    const errorMessage = getErrorMessage(error);
+    console.log('Error', error);
+    
+    const errorMessage = getErrorMessage(error.error);
     this._loadingState.update((state) => ({
       ...state,
       error: errorMessage,

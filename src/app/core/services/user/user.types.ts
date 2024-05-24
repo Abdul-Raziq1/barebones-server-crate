@@ -15,3 +15,10 @@ export interface TokenPayload {
     iat: number;
     exp: number;
 }
+
+export interface UserInfo {
+    firstName: string;
+    lastName: string;
+    contact: null | string;
+    email: string
+}

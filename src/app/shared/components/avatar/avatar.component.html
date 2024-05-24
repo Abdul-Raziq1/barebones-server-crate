@@ -1,0 +1,14 @@
+<div class="container">
+  
+    @switch (user.status()) { 
+        @case ('pending') {
+          <span class="loader loader-default"></span>
+        } 
+        @case ('error') {
+            ??
+        }
+        @case ('success') {
+            <span>{{ user.data()?.firstName!.charAt(0) + user.data()?.lastName!.charAt(0) }}</span>
+        }
+    } 
+</div>

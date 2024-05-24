@@ -1,11 +1,18 @@
-import { Injectable, signal } from '@angular/core';
-import { User } from './user.types';
+import { Injectable, inject, signal } from '@angular/core';
+import { User, UserInfo } from './user.types';
 import { SERVER_CRATE_USER } from '../../util/constants';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  #baseUrl = environment.baseUrl;
+
+  #http = inject(HttpClient)
+
   user = signal<User>({
     firstName: '',
     lastName: '',
@@ -14,6 +21,10 @@ export class UserService {
   });
 
   constructor() {}
+
+  getUserData() {
+    return this.#http.get<UserInfo>(`${this.#baseUrl}/profile/basic-info`)
+  }
 
   patchUser(keyToUpdate: keyof User, value: string) {
     this.user.update((user) => ({ ...user, [keyToUpdate]: value }));

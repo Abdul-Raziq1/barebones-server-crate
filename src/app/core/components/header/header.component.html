@@ -1,9 +1,15 @@
 <nav>
-    <ul class="max-cap">
+  <div class="max-cap">
+    <ul>
       <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</li>
       <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/products">Products</li>
       <li routerLink="/admin">Admin</li>
-      <li routerLink="/login">Login</li>
-      <li routerLink="/signup">Signup</li>
+      @if (isAuthenticated) {
+        <app-avatar />
+      } @else {
+        <li routerLink="/login">Login</li>
+        <li routerLink="/signup">Signup</li>
+      }
     </ul>
+  </div>
   </nav>

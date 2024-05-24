@@ -1,4 +1,11 @@
-import { Inject, Injectable, PLATFORM_ID, effect, inject, signal } from '@angular/core';
+import {
+  Inject,
+  Injectable,
+  PLATFORM_ID,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { UserSignup, VerifyEmail } from '../../../auth/signup/signup.types';
@@ -6,6 +13,7 @@ import { LoggedInUser, TokenPayload, User } from '../user/user.types';
 import { ADMIN, GUEST, SERVER_CRATE_USER, USER } from '../../util/constants';
 import { jwtDecode } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +21,12 @@ import { isPlatformBrowser } from '@angular/common';
 export class AuthService {
   #baseUrl = environment.baseUrl;
   #http = inject(HttpClient);
+  #userService = inject(UserService);
 
   constructor(@Inject(PLATFORM_ID) private platFormId: Object) {
     effect(() => {
       console.log(this.userAuthStatus());
-    })
+    });
   }
 
   userAuthStatus = signal<{
@@ -37,18 +46,17 @@ export class AuthService {
   }
 
   getUserToken() {
-    if (isPlatformBrowser(this.platFormId)) {  
-      const userString = localStorage.getItem(SERVER_CRATE_USER)
+    if (isPlatformBrowser(this.platFormId)) {
+      const userString = localStorage.getItem(SERVER_CRATE_USER);
       if (userString) {
-        const user: User = JSON.parse(
-          userString
-        );      
+        const user: User = JSON.parse(userString);
         if (user) {
           console.log('User token', user.token);
           return user.token;
         }
-      }    
+      }
     }
+    console.log('Here first')
     return null;
   }
 
@@ -57,14 +65,26 @@ export class AuthService {
     if (token) {
       const tokenPayload: TokenPayload = jwtDecode(token);
       console.log('Payload', tokenPayload);
-      
+
       if (tokenPayload.role === ADMIN) {
         this.userAuthStatus.set({ authenticated: true, role: ADMIN });
       } else if (tokenPayload.role === USER) {
         this.userAuthStatus.set({ authenticated: true, role: USER });
       }
+      this.#userService.getUserInfo();
       return;
     }
-    this.userAuthStatus.set({ authenticated: false, role: GUEST })
+    this.userAuthStatus.set({ authenticated: false, role: GUEST });
+  }
+
+  isAuthenticated() {
+    const token = this.getUserToken();
+    if (token) {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      if (decodedToken.exp > Date.now() / 1000) {
+        return true;
+      }
+    }
+    return false;
   }
 }

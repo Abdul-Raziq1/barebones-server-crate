@@ -60,6 +60,7 @@ export class OtpComponent {
             this.#router.navigate(['/settings'], { replaceUrl: true });
           }),
           catchError((err) => {
+            this.loadingService.setLoadingToFalse()
             this.loadingService.updateErrorMessageByError(err)
             return EMPTY;
           }),

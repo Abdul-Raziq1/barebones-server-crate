@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserSignup, VerifyEmail } from '../../../auth/signup/signup.types';
 import { LoggedInUser, TokenPayload, User } from '../user/user.types';
 import { ADMIN, GUEST, SERVER_CRATE_USER, USER } from '../../util/constants';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; 
 import { isPlatformBrowser } from '@angular/common';
 import { UserService } from '../user/user.service';
 
